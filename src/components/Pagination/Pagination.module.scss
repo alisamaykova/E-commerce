@@ -1,0 +1,57 @@
+@import 'styles/variables';
+@import 'styles/mixin';
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $size-14;
+  margin-top: $size-24;
+  flex-wrap: wrap;
+  border: none;
+}
+
+.arrow {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: $size-12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  svg {
+    width: $size-20;
+    height: $size-20;
+  }
+}
+
+.pageButton {
+  background: none;
+  border: none;
+  padding: $size-12 $size-12;
+  min-width: $size-32;
+  text-align: center;
+  cursor: pointer;
+  
+  &:hover:not(.active) {
+    color: $accent;
+  }
+
+  &.active {
+    background: $accent;
+    color: $white;
+    border-color: $accent;
+  }
+}
+
+.dots {
+  padding: $size-12 $size-14;
+  color: $secondary;
+}

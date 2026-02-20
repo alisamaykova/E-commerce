@@ -1,0 +1,74 @@
+@import 'styles/variables';
+
+.text {
+  margin: 0;
+  font-family: 'Roboto', sans-serif !important;
+  font-style: normal;
+}
+
+.view-title {
+  font-size: 44px;
+  line-height: 48px;
+  font-weight: $font-700;
+}
+
+.view-subtitle {
+  font-size: 32px;
+  line-height: 36px;
+  font-weight: $font-700;
+}
+
+.view-button {
+  font-size: 18px;
+  line-height: 18px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.view-p-20 {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: $font-400;
+}
+
+.view-p-18 {
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: $font-400;
+}
+
+.view-p-16 {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: $font-400;
+}
+
+.view-p-14 {
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: $font-400;
+}
+
+.weight-normal {
+  font-weight: $font-400 !important;
+}
+
+.weight-medium {
+  font-weight: $font-500 !important;
+}
+
+.weight-bold {
+  font-weight: $font-700 !important;
+}
+
+.color-primary {
+  color: $primary;
+}
+
+.color-secondary {
+  color: $secondary;
+}
+
+.color-accent {
+  color: $accent;
+}

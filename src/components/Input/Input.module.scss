@@ -1,0 +1,67 @@
+@import 'styles/variables';
+
+.input {
+  position: relative;
+  display: inline-block;
+  min-width: 377px;
+  box-sizing: border-box;
+  font-size: $size-24;
+  font-weight: $font-400;
+  line-height: 1.5;
+
+  &__field {
+    box-sizing: border-box;
+    font-size: $size-14;
+    font-weight: $font-400;
+    line-height: 1.5;
+    width: 100%;
+    height: 52px;
+    padding: $size-8 $size-16;
+    padding-right: $size-40;
+    border: 1px solid $white;
+    color: $primary;
+    background-color: $white;
+    outline: none;
+
+    &::placeholder {
+      color: $secondary;
+      font-size: $size-14;
+    }
+
+    &:hover:not(:disabled) {
+      border-color: $accent;
+      background-color: $white;
+    }
+
+    &:focus {
+      border-color: $accent;
+      background-color: $white;
+    }
+  }
+
+  &__after {
+    position: absolute;
+    right: $size-12;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    line-height: 1;
+
+    svg {
+      display: block;
+      width: 27px;
+      height: 27px;
+    }
+  }
+
+  &--disabled &__field {
+    background-color: $white;
+    color: $input-text-disabled;
+    cursor: not-allowed;
+  }
+
+  &--disabled &__after {
+    color: $secondary;
+  }
+}
