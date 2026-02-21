@@ -2,7 +2,7 @@
 
 .text {
   margin: 0;
-  font-family: 'Roboto', sans-serif !important;
+  font-family: 'Roboto', sans-serif;
   font-style: normal;
 }
 
@@ -50,15 +50,15 @@
 }
 
 .weight-normal {
-  font-weight: $font-400 !important;
+  font-weight: $font-400;
 }
 
 .weight-medium {
-  font-weight: $font-500 !important;
+  font-weight: $font-500;
 }
 
 .weight-bold {
-  font-weight: $font-700 !important;
+  font-weight: $font-700;
 }
 
 .color-primary {

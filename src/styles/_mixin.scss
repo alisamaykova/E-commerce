@@ -1,25 +1,37 @@
 @import './variables';
 
 @mixin mobile {
-    @media (max-width: $breakpoint-s) {
+    @media (max-width: $breakpoint-480) {
         @content;
+    }
+}
+
+@mixin small-tablet {
+    @media (min-width: 481px) and (max-width: 754px) {
+        @content
     }
 }
 
 @mixin tablet {
-    @media (max-width: $breakpoint-m) {
-        @content;
+    @media (max-width: 768px) {
+        @content
+    }
+}
+
+@mixin small-desktop {
+    @media (min-width: 769px) and (max-width:844px) {
+        @content
     }
 }
 
 @mixin desktop {
-    @media (max-width: $breakpoint-l) {
+    @media (max-width: $breakpoint-1024) {
         @content;
     }
 }
 
 @mixin large-desktop {
-    @media (max-width: $breakpoint-xl) {
+    @media (max-width: $breakpoint-1440) {
         @content;
     }
 }

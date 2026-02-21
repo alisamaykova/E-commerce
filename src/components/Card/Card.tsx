@@ -42,7 +42,7 @@ const Card: React.FC<CardProps> = ({
     if (!contentSlot) return null;
     if (typeof contentSlot === 'string' || typeof contentSlot === 'number') {
       return (
-        <Text view="p-18" weight="bold" className={styles['card__content-slot']}>
+        <Text view="p-18" weight="bold">
           {contentSlot}
         </Text>
       );
@@ -67,13 +67,12 @@ const Card: React.FC<CardProps> = ({
           <Text maxLines={3} view="p-16" color="secondary" className={styles['card__subtitle']}>
             {subtitle}
           </Text>,
-          styles['card__subtitle-wrapper']
         )}
 
         {(contentSlot || actionSlot) && (
           <div className={styles['card__footer']}>
-            {contentSlot && wrapWithStopPropagation(renderContentSlot(), styles['card__content-slot'])}
-            {actionSlot && wrapWithStopPropagation(actionSlot, styles['card__action-slot'])}
+            {contentSlot && wrapWithStopPropagation(renderContentSlot())}
+            {actionSlot && wrapWithStopPropagation(actionSlot)}
           </div>
         )}
       </div>

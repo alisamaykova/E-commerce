@@ -11,102 +11,126 @@
   overflow: hidden;
   background-color: $white;
   cursor: pointer;
+  transition: box-shadow 0.3s ease;
 
   &:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
   }
 
-@include tablet {
-  max-width: 280px;
-  height: auto;
-
-  .card__image-container {
+  @include tablet {
+    max-width: 280px;
     height: auto;
   }
 
-  .card__title {
-    font-size: $size-18;
+  @include mobile {
+    max-width: 240px;
+    height: auto;
   }
-
-  .card__caption {
-    font-size: $size-12;
-  }
-
-  .card__footer {
-    margin-top: $size-12;
-  }
-}
-
-
-@include mobile {
-  max-width: 240px;
-  height: auto;
 
   .card__image-container {
+    width: 100%;
+    max-height: 360px;
     height: auto;
-    width: auto;
-  }
+    overflow: hidden;
+    background-color: $card-image-bg;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  .card__title {
-    font-size: $size-16;
-  }
+    @include tablet {
+      height: auto;
+    }
 
-  .card__subtitle {
-    font-size: $size-14;
+    @include mobile {
+      height: auto;
+      width: auto;
+    }
+
+
+    .card__image {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+    }
   }
 
   .card__content {
-    padding: $size-8;
-    gap: 2px;
+    padding-left: $size-12;
+    padding-right: $size-12;
+    padding-bottom: $size-48;
+    padding-top: $size-48;
+    display: flex;
+    flex-direction: column;
+    gap: $size-10;
+
+    @include mobile {
+      padding: $size-16;
+      gap: 2px;
+    }
+  
+
+  .card__title {
+    margin: 0;
+    font-size: $size-20;
+    min-height: 44px;
+
+    @include tablet {
+      font-size: $size-18;
+    }
+
+    @include mobile {
+      font-size: $size-16;
+    }
+  }
+
+  .card__subtitle {
+    margin: 0;
+
+    @include mobile {
+      font-size: $size-14;
+    }
   }
 }
+
+  .card__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: $size-8;
+    gap: $size-12;
+
+    button{
+      width: auto;
+      min-width: 80px;
+      max-width: 149px;
+
+    @include small-desktop{
+      font-size: $size-16;
+      white-space: nowrap;
+    }
+
+    @include tablet {
+      font-size: $size-16;
+    }
+
+    @include small-tablet{
+      font-size: $size-16;
+      white-space: nowrap;
+    }
+
+    @include mobile{
+      font-size: $size-12;
+    }
+  }
 }
 
-.card__image-container {
-  width: 100%;
-  max-height: 360px;
-  height: auto;
-  overflow: hidden;
-  background-color: $card-image-bg;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  .card__caption {
+    font-size: $size-14;
+    color: $secondary;
 
-.card__image {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: contain;
-}
-
-.card__content {
-  padding-left: $size-12;
-  padding-right: $size-12;
-  padding-bottom: $size-48;
-  padding-top: $size-48;
-  display: flex;
-  flex-direction: column;
-  gap: $size-10;
-}
-
-.card__title {
-  margin: 0;
-  font-size: $size-20;
-}
-
-.card__subtitle {
-  margin: 0;
-}
-
-.card__footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: $size-8;
-}
-
-.card__caption {
-  font-size: $size-14;
-  color: $secondary;
-}
+    @include tablet {
+      font-size: $size-12;
+    }
+  }
+  }

@@ -32,13 +32,19 @@ export const ProductDetail = () => {
         navigate(-1);
     }
 
-    if (loading) return <div className={styles.loaderContainer}><Loader size='l'/></div>
-    if (error) return <div className={styles.errorContainer}><Text view='subtitle'>Error: {error}</Text></div>
-    if (!product) return <div className={styles.errorContainer}><Text view='subtitle'>Error: The product was not found</Text></div>
+    if (loading) {
+        return <div className={styles.loaderContainer}><Loader size='l' /></div>
+    }
+    if (error) {
+        return <div className={styles.errorContainer}><Text view='subtitle'>Error: {error}</Text></div>
+    }
+    if (!product) {
+        return <div className={styles.errorContainer}><Text view='subtitle'>Error: The product was not found</Text></div>
+    }
     return (
         <div>
             <button onClick={handleGoBack} className={styles.goBackButton}
-            > <ArrowSideIcon className={styles.ArrowDownIcon} style={{ }} />
+            > <ArrowSideIcon className={styles.ArrowDownIcon} />
                 <Text view="p-20" className={styles.goBackText}>Назад</Text>
             </button>
 

@@ -42,8 +42,12 @@ export const ProductList = () => {
     navigate(`/product/${documentId}`);
   };
 
-  if (loading) return <div className={styles.loaderContainer}><Loader size='l'/></div>;
-  if (error) return <div className={styles.errorContainer}><Text view='subtitle'>Error: {error}</Text></div>;
+  if (loading) {
+    return <div className={styles.loaderContainer}><Loader size='l'/></div>;
+  }
+  if (error) {
+     return <div className={styles.errorContainer}><Text view='subtitle'>Error: {error}</Text></div>;
+  }
 
   return (
     <div className={styles.root}>

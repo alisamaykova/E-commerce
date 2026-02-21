@@ -16,6 +16,7 @@ $size-100: 100px;
 $size-48: 48px;
 $size-40: 40px;
 $size-32: 32px;
+$size-30: 30px;
 $size-24: 24px; //xl
 $size-20: 20px; //l
 $size-18: 18px;
@@ -26,11 +27,11 @@ $size-10: 10px;
 $size-8: 8px; //xss
 
 //Миксины
-$breakpoint-xs:375;
-$breakpoint-s:480px;
-$breakpoint-m:768px;
-$breakpoint-l:1024px;
-$breakpoint-xl:1440px;
+$breakpoint-375:375;
+$breakpoint-480:480px;
+$breakpoint-768:768px;
+$breakpoint-1024:1024px;
+$breakpoint-1440:1440px;
 
 //Шрифты
 $font-400: 400;

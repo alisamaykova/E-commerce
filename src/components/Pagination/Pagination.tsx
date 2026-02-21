@@ -1,5 +1,6 @@
 import React from 'react';
 import ArrowDownIcon from 'components/icons/ArrowDownIcon';
+import { getPages } from 'utils/getPages';
 import styles from './Pagination.module.scss';
 
 type PaginationProps = {
@@ -13,38 +14,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   pageCount,
   onPageChange,
 }) => {
-  const getPages = (): (number | string)[] => {
-    const pages: (number | string)[] = [];
-    const sideCount = 2;
-    const maxVisible = 5; 
-
-    if (pageCount <= maxVisible + 2) {
-      for (let i = 1; i <= pageCount; i++) pages.push(i);
-      return pages;
-    }
-
-    pages.push(1);
-
-    let start = Math.max(2, currentPage - sideCount);
-    let end = Math.min(pageCount - 1, currentPage + sideCount);
-
-    if (start > 2) {
-      pages.push('...');
-    }
-
-    for (let i = start; i <= end; i++) {
-      pages.push(i);
-    }
-
-    if (end < pageCount - 1) {
-      pages.push('...');
-    }
-
-    pages.push(pageCount);
-    return pages;
-  };
-
-  const pages = getPages();
+  const pages = getPages(currentPage, pageCount);
 
   return (
     <div className={styles.pagination}>
@@ -57,23 +27,21 @@ export const Pagination: React.FC<PaginationProps> = ({
       </button>
 
       {pages.map((page, index) => {
-        if (page === '...') {
+        if (typeof page === 'string') {
           return (
             <span key={`dots-${index}`} className={styles.dots}>
               ...
             </span>
           );
         }
-        const pageNum = page as number;
         return (
           <button
-            key={pageNum}
-            className={`${styles.pageButton} ${
-              pageNum === currentPage ? styles.active : ''
-            }`}
-            onClick={() => onPageChange(pageNum)}
+            key={page}
+            className={`${styles.pageButton} ${page === currentPage ? styles.active : ''
+              }`}
+            onClick={() => onPageChange(page)}
           >
-            {pageNum}
+            {page}
           </button>
         );
       })}

@@ -53,24 +53,27 @@ export type Product = {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  images?: ProductImage[]; // массив изображений (может отсутствовать)
-  productCategory?: any;   // пока не используем, позже уточним
+  images?: ProductImage[]; 
+  productCategory?: any;  
+};
+
+export type ProductMeta ={
+  pagination?:{
+    page: number;
+    pageSize: number;
+    pageCount: number;
+    total: number;
+  };
 };
 
 // Тип ответа от API для списка товаров
 export type ProductsResponse = {
   data: Product[];
-  meta: {
-    pagination: {
-      page: number;
-      pageSize: number;
-      total: number;
-    };
-  };
+  meta: ProductMeta;
 };
 
 // Тип ответа для одного товара
 export type ProductResponse = {
   data: Product;
-  meta: Record<string, any>;
+  meta: ProductMeta;
 };

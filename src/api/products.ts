@@ -3,8 +3,6 @@ import qs from 'qs';
 
 const BASE_URL = 'https://front-school-strapi.ktsdev.ru/api';
 
-const API_TOKEN = '';
-
 export const getProducts = async (page: number=1, pageSize: number = 9) => {
   const query = qs.stringify({
     populate: ['images', 'productCategory'],
@@ -16,9 +14,7 @@ export const getProducts = async (page: number=1, pageSize: number = 9) => {
     { encodeValuesOnly: true }
   );
 
-  const response = await axios.get(`${BASE_URL}/products?${query}`, {
-    headers: { Authorization: `Bearer ${API_TOKEN}` },
-  });
+  const response = await axios.get(`${BASE_URL}/products?${query}`);
 
   return response.data;
 
@@ -32,10 +28,6 @@ export const getProductById = async (documentId:string) => {
     {encodeValuesOnly:true}
   );
 
-  const response = await axios.get(`${BASE_URL}/products/${documentId}?${query}`, {
-    headers: {
-      Authorization: `Bearer ${API_TOKEN}`,
-    },
-  });
+  const response = await axios.get(`${BASE_URL}/products/${documentId}?${query}`);
   return response.data;
 }

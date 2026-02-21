@@ -1,25 +1,32 @@
-import eslint from '@eslint/js';
-import import_ from 'eslint-plugin-import';
+import js from '@eslint/js';
+import importPlugin from 'eslint-plugin-import';
 import prettier from 'eslint-plugin-prettier';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
-import tseslint from 'typescript-eslint';
+import tseslint from '@typescript-eslint/eslint-plugin';
+import tsparser from '@typescript-eslint/parser';
 
-export default tseslint.config(
+export default [
   {
-    ignores: [
-      '**/dist',
-      '**/build',
-      '**/public',
-      '**/*.cjs',
-      '**/node_modules',
-    ],
+    ignores: ['/dist', '/build', '/public', '/*.cjs', '**/node_modules'],
   },
-  eslint.configs.recommended,
-  ...tseslint.configs.strict,
-  ...tseslint.configs.stylistic,
+  js.configs.recommended,
   {
-    files: ['src/**/*.tsx', 'src/**/*.ts'],
+    files: ['src//*.ts', 'src//*.tsx'],
+    languageOptions: {
+      parser: tsparser,
+      parserOptions: {
+        project: ['./tsconfig.json'],
+        tsconfigRootDir: process.cwd(),
+      },
+    },
+    plugins: {
+      '@typescript-eslint': tseslint,
+      react,
+      'react-hooks': reactHooks,
+      import: importPlugin,
+      prettier,
+    },
     rules: {
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       '@typescript-eslint/consistent-type-exports': 'error',
@@ -29,41 +36,15 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'warn',
       '@typescript-eslint/no-unnecessary-condition': 'warn',
-    },
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-  },
-  {
-    plugins: { prettier, import: import_, react, 'react-hooks': reactHooks },
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
-    rules: {
-      'eol-last': ['error', 'always'],
-      'prettier/prettier': 'error',
       'no-console': 'error',
+      'no-undef': 'off',
+      'eol-last': ['error', 'always'],
       'linebreak-style': ['error', 'unix'],
       'import/order': [
         'error',
         {
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            'object',
-            'parent',
-            'sibling',
-            'index',
-          ],
-          alphabetize: {
-            order: 'asc',
-          },
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+          alphabetize: { order: 'asc' },
           'newlines-between': 'always',
         },
       ],
@@ -75,6 +56,12 @@ export default tseslint.config(
       'react/self-closing-comp': 'error',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
+      'prettier/prettier': 'error',
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
     },
   },
-);
+];

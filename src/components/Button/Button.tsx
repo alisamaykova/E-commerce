@@ -16,14 +16,13 @@ const Button: React.FC<ButtonProps> = ({
   type = 'button',
   ...props
 }) => {
-  const isOriginallyDisabled = disabled;
 
   const buttonClasses = classNames(
     styles.button,
     className,
     {
       [styles['button--loading']]: loading,
-      [styles['button--loading-original-enabled']]: loading && !isOriginallyDisabled,
+      [styles['button--loading-original-enabled']]: loading && !disabled,
     }
   );
 
