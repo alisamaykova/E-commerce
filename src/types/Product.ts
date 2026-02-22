@@ -53,12 +53,12 @@ export type Product = {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  images?: ProductImage[]; 
-  productCategory?: any;  
+  images?: ProductImage[];
+  productCategory?: any;
 };
 
-export type ProductMeta ={
-  pagination?:{
+export type ProductMeta = {
+  pagination?: {
     page: number;
     pageSize: number;
     pageCount: number;

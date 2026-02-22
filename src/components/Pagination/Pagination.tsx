@@ -19,6 +19,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   return (
     <div className={styles.pagination}>
       <button
+      type = 'button'
         className={styles.arrow}
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
@@ -36,6 +37,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         }
         return (
           <button
+          type='button'
             key={page}
             className={`${styles.pageButton} ${page === currentPage ? styles.active : ''
               }`}
@@ -47,6 +49,7 @@ export const Pagination: React.FC<PaginationProps> = ({
       })}
 
       <button
+      type='button'
         className={styles.arrow}
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === pageCount}

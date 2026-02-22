@@ -12,12 +12,12 @@ export default [
   },
   js.configs.recommended,
   {
-    files: ['src//*.ts', 'src//*.tsx'],
+    files: ['src/**/*.{ts, tsx}'],
     languageOptions: {
       parser: tsparser,
       parserOptions: {
         project: ['./tsconfig.json'],
-        tsconfigRootDir: process.cwd(),
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     plugins: {
