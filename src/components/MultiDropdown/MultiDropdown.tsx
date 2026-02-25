@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Input } from '../Input';
 import styles from './MultiDropdown.module.scss';
+import { observer } from 'mobx-react-lite';
 
 export type Option = {
   key: string;
@@ -16,7 +17,7 @@ export type MultiDropdownProps = {
   getTitle: (value: Option[]) => string;
 };
 
-const MultiDropdown: React.FC<MultiDropdownProps> = ({
+const MultiDropdown: React.FC<MultiDropdownProps> = observer( ({
   className,
   options,
   value,
@@ -128,6 +129,6 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({
       )}
     </div>
   );
-};
+});
 
 export default MultiDropdown;

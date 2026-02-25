@@ -1,59 +1,59 @@
 import { useEffect, useState } from 'react';
-import { getProducts } from 'api/products';
 import { useNavigate } from 'react-router-dom';
-import type { Product } from 'types/Product';
-import Card from 'components/Card';
-import Button from 'components/Button';
-import { Pagination } from 'components/Pagination/Pagination';
-import Text from 'components/Text';
-import Input from 'components/Input';
+import { observer } from 'mobx-react-lite';
+import { useStore } from '../../stores';
+import Card from '../../components/Card/Card';
+import Button from '../../components/Button/Button';
+import { Pagination } from '../../components/Pagination/Pagination';
+import Text from '../../components/Text';
+import Input from '../../components/Input';
 import styles from './ProductList.module.scss';
-import Loader from 'components/Loader';
+import { values } from 'mobx';
+import MultiDropdown from 'components/MultiDropdown/MultiDropdown'
+import type { Option } from 'components/MultiDropdown/MultiDropdown';
 
-export const ProductList = () => {
+export const ProductList = observer(() => {
   const navigate = useNavigate();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { productStore, cartStore } = useStore();
+  const [localSearch, setLocalSearch] = useState(productStore.searchQuery);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageCount, setPageCount] = useState(1);
-  const [total, setTotal] = useState(0);
-  const pageSize = 9;
-
-  const [searchValue, setSearchValue] = useState('');
+  console.log('render:', {
+    localSearch,
+    storeSearch: productStore.searchQuery
+  });
 
   useEffect(() => {
-    setLoading(true);
-    getProducts(currentPage, pageSize)
-      .then(response => {
-        setProducts(response.data);
-        setPageCount(response.meta.pagination.pageCount);
-        setTotal(response.meta.pagination.total);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, [currentPage]);
+    setLocalSearch(productStore.searchQuery);
+  }, [productStore.searchQuery]);
+
+  const handleSearch = () => {
+    productStore.applySearch(localSearch);
+  };
+  if (!productStore.categories) {
+    return null
+  }
+  const categories = productStore.categories;
 
   const handleCardClick = (documentId: string) => {
     navigate(`/product/${documentId}`);
   };
 
-  if (loading) {
-    return <div className={styles.loaderContainer}><Loader size='l'/></div>;
+  const handleFilterChange = (categories: Option[]) => {
+    productStore.applyFilter(categories);
+  };
+
+  if (productStore.loading && productStore.products.length === 0) {
+    return <div>Loading...</div>; // Лоадер добавь
   }
-  if (error) {
-     return <div className={styles.errorContainer}><Text view='subtitle'>Error: {error}</Text></div>;
+  if (productStore.error) {
+    return <div className={styles.error}>Error: {productStore.error}</div>;
   }
 
   return (
     <div className={styles.root}>
       <div className={styles.header}>
         <div className={styles.title}>
-          <Text className={styles.titleText}view="title" color="primary">Products</Text>
+          <Text className={styles.titleText} view="title" color="primary">Products</Text>
         </div>
         <div className={styles.subtitle}>
           <Text className={styles.subtitleText} view="p-20" color="secondary">
@@ -67,55 +67,59 @@ export const ProductList = () => {
           <div className={styles.inputContainer}>
             <Input
               className={styles.searchInput}
-              value={searchValue}
-              onChange={setSearchValue}
+              value={localSearch}
+              onChange={setLocalSearch}
               placeholder="Search product"
               afterSlot={null}
             />
           </div>
-          <Button className={styles.searchButton}>Find now</Button>
+          <Button className={styles.searchButton} onClick={handleSearch}>Find now</Button>
         </div>
-        <div className={styles.totalProducts}>
-          <Text className={styles.totalProductsText} view="subtitle">Total products</Text>
-          <Text className={styles.totalText} view="p-20" weight='bold' color="accent">{total}</Text>
+        <div className={styles.filters}>
+          <MultiDropdown
+            options={categories}
+            value={productStore.selectedCategories}
+            onChange={handleFilterChange}
+            getTitle={(values) =>
+              values.length === 0
+                ? 'All categories'
+                : values.length === 1
+                  ? values[0].value
+                  : `${values.length} categories`
+            }
+          />
         </div>
       </div>
 
       <div className={styles.gridContainer}>
         <div className={styles.grid}>
-          {products.map(product => (
+          {productStore.products.map((product) => (
             <Card
               key={product.id}
               image={
-                product.images?.[0]?.formats?.small?.url ||
+                product.images?.[0]?.formats?.medium?.url ||
                 product.images?.[0]?.url ||
                 ''
               }
-              captionSlot={product.productCategory?.title || undefined}
+              captionSlot={product.productCategory?.title}
               title={product.title}
               subtitle={product.description}
               contentSlot={`$${product.price}`}
               onClick={() => handleCardClick(product.documentId)}
-              actionSlot={
-                <Button onClick={() => handleCardClick(product.documentId)}>
-                  Add to cart
-                </Button>
-              }
+              actionSlot={<Button onClick={() => cartStore.addItem(product.id)}> 
+                Add to cart
+              </Button>}
             />
           ))}
         </div>
       </div>
-      {pageCount > 1 && (
-        <div className={styles.paginationContainer}>
-        <div className={styles.pagination}>
-          <Pagination
-            currentPage={currentPage}
-            pageCount={pageCount}
-            onPageChange={setCurrentPage}
-          />
-        </div>
-        </div>
-      )}
+      <div className={styles.paginationContainer}>
+        <Pagination
+          currentPage={productStore.page}
+          pageCount={productStore.pageCount}
+          onPageChange={(page) => productStore.setPage(page)}
+        />
+      </div>
     </div>
   );
-};
+});

@@ -52,6 +52,8 @@
 .searchSection {
   margin-top: 50px;
   max-width: 1240px;
+  opacity: visible;
+  margin-bottom: 900px;
 
   @include mobile{
     margin-top: $size-20;
