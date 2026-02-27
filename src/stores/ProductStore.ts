@@ -11,7 +11,7 @@ export class ProductStore {
   error: string | null = null;
   page = 1;
   pageSize = 9;
-  total = 0;
+  total: number = 0;
   pageCount = 1;
   searchQuery = '';
 
@@ -46,7 +46,6 @@ export class ProductStore {
     }
   }
 
-  // загрузка товаров с сервера
   async loadProducts() {
     this.loading = true;
     this.error = null;

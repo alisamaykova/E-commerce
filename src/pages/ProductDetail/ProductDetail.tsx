@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getProductById } from 'api/products'
 import type { Product } from "types/Product";
+import { useStore } from "../../stores";
 import ArrowSideIcon from "components/icons/ArrowDownIcon";
 import styles from './ProductDetail.module.scss';
 import Text from "components/Text";
 import Loader from "components/Loader";
+import Button from "components/Button";
 
 export const ProductDetail = () => {
     const { documentId } = useParams<{ documentId: string }>();
@@ -32,33 +34,40 @@ export const ProductDetail = () => {
         navigate(-1);
     }
 
+    const { cartStore } = useStore();
+
     if (loading) {
-        return <div className={styles.loaderContainer}><Loader size='l' /></div>
+        return <div className={styles['loader--container']}><Loader size='l' /></div>
     }
     if (error) {
-        return <div className={styles.errorContainer}><Text view='subtitle'>Error: {error}</Text></div>
+        return <div className={styles['error--container']}><Text view='subtitle'>Error: {error}</Text></div>
     }
     if (!product) {
-        return <div className={styles.errorContainer}><Text view='subtitle'>Error: The product was not found</Text></div>
+        return <div className={styles['error--container']}><Text view='subtitle'>Error: The product was not found</Text></div>
     }
     return (
-        <div>
-            <button onClick={handleGoBack} className={styles.goBackButton}
-            > <ArrowSideIcon className={styles.ArrowDownIcon} />
-                <Text view="p-20" className={styles.goBackText}>Назад</Text>
+        <div className={styles.root}>
+            <button onClick={handleGoBack} className={styles['root__go-back--button']}
+            > <ArrowSideIcon className={styles['root__arrow-side-icon']} />
+                <Text view="p-20" className={styles['root__go-back--text']}>Назад</Text>
             </button>
 
-            <div className={styles.productContainer}>
-                <div className={styles.imageContainer}>
-                    <img className={styles.productImage}
+            <div className={styles['root__product--container']}>
+                <div className={styles['root__image--container']}>
+                    <img className={styles['root__product--image']}
                         src={product.images?.[0]?.formats?.medium?.url || product.images?.[0]?.url}
                         alt={product.title}
                     />
                 </div>
-                <div className={styles.descriptionContainer}>
-                    <Text view="title" className={styles.productTitle}>{product.title}</Text>
-                    <Text view="p-20" color="secondary" className={styles.productDescription}>{product.description}</Text>
-                    <Text view="title" className={styles.productPrice}>${product.price}</Text>
+                <div className={styles['root__description--container']}>
+                    <Text view="title" className={styles['root__product--title']}>{product.title}</Text>
+                    <Text view="p-20" color="secondary" className={styles['root__product--description']}>{product.description}</Text>
+                    <Text view="title" className={styles['root__product--price']}>${product.price}</Text>
+                    <div className={styles['root__button--container']}>
+                        <Button className={styles['root__button']} onClick={() => cartStore.addItem(product.id)}>
+                            Add to cart
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>

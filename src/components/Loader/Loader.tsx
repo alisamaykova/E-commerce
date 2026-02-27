@@ -8,7 +8,7 @@ export type LoaderProps = {
 
 const Loader: React.FC<LoaderProps> = ({ size = 'l', className = '' }) => {
   return (
-    <div className={`${styles['loader-container']} ${className}`}>
+    <div className={`${styles['loader--container']} ${className}`}>
       <div
         className={`${styles.loader} ${styles[`loader--${size}`]}`}
         aria-label="Loading"

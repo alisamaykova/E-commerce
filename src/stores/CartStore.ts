@@ -2,7 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 
 import { addToCart as apiAddToCart } from '../api/auth';
 import { getCart, removeFromCart } from '../api/cart';
-import type { CartItem } from '../api/cart';
+import type { CartItem } from '../types/cart';
 
 export class CartStore {
   items: CartItem[] = [];

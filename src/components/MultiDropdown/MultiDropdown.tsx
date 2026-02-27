@@ -77,7 +77,7 @@ const MultiDropdown: React.FC<MultiDropdownProps> = observer( ({
       ? getTitle(value)
       : '';
 
-  let inputClassName = styles['multi-dropdowninput'];
+  let inputClassName = styles['multi-dropdown__input'];
   if (isOpen && value.length > 0) {
     inputClassName +=  `${styles['multi-dropdowninput--open-selected']}`;
   } else if (!isOpen && value.length > 0) {

@@ -2,7 +2,7 @@
 
 .multi-dropdown {
   position: relative;
-  width: 377px;
+  width: 300px;
   height: 52px;
   font-size: $size-16;
   font-weight: $font-600;
@@ -11,13 +11,12 @@
   &--disabled {
     pointer-events: none;
 
-    .multi-dropdowninput .inputfield {
+  &__input .inputfield {
       color: $secondary;
     }
   }
-}
 
-.multi-dropdown__input {
+&__input {
   box-sizing: border-box;
   font-size: $size-24;
   font-weight: $font-400;
@@ -25,8 +24,6 @@
   width: auto;
   height: 52px;
 }
-
-.multi-dropdowninput {
 
   .inputafter {
     display: flex;
@@ -38,7 +35,7 @@
 
   .inputfield {
     box-sizing: border-box;
-    width: 377px;
+    width: 300px;
     height: 52px;
     font-size: $size-16;
     font-weight: $font-400;
@@ -56,9 +53,9 @@
       border-color: $accent;
     }
   }
-}
 
-.multi-dropdown__options {
+
+&__options {
   position: absolute;
   top: 100%;
   left: 0;
@@ -74,7 +71,7 @@
   line-height: 1.5;
 }
 
-.multi-dropdown__option {
+&__option {
   padding: $size-10 $size-12;
   cursor: pointer;
   height: $size-48;
@@ -85,18 +82,19 @@
     border-bottom: none;
   }
 
+  &:hover {
+    color: $secondary;
+  }
+
   &--selected {
     color: $accent;
-
-    &:hover {
-      color: $secondary;
-    }
   }
 }
 
-.multi-dropdowninput--open-selected,
-.multi-dropdowninput--closed-selected {
+&--open-selected,
+&--closed-selected {
   .inputfield {
     color: $primary;
   }
+}
 }

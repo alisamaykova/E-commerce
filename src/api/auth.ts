@@ -13,10 +13,8 @@ export async function registerTestUser() {
     });
 
     localStorage.setItem('jwt', data.jwt);
-    console.log('JWT получен через регистрацию');
     return data.jwt;
   } catch (error) {
-    console.log('Регистрация не удалась, пробуем логин');
     return loginTestUser();
   }
 }
@@ -29,10 +27,9 @@ export async function loginTestUser() {
     });
 
     localStorage.setItem('jwt', data.jwt);
-    console.log('JWT получен через логин');
     return data.jwt;
   } catch (error) {
-    console.error('Логин тоже не удался:', error);
+    console.error(error);
     throw error;
   }
 }

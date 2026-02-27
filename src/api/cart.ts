@@ -1,24 +1,26 @@
 import axios from 'axios';
+import qs from 'qs';
+import type { CartItem } from 'types/cart';
 
 const BASE_URL = 'https://front-school-strapi.ktsdev.ru/api';
 
-const JWT = '';
-
-export type CartItem = {
-  id: number;
-  product: {
-    id: number;
-    title: string;
-    price: number;
-    image?: string;
-  };
-  quantity: number;
+const getAuthHeaders = () => {
+  const jwt = localStorage.getItem('jwt');
+  if (!jwt) {
+    throw new Error('No JWT found. Please login first.');
+  }
+  return { Authorization: `Bearer ${jwt}` };
 };
 
 export const getCart = async (): Promise<CartItem[]> => {
-  console.log('JWT for cart:', localStorage.getItem('jwt'));
-  const response = await axios.get(`${BASE_URL}/cart`, {
-    headers: { Authorization: `Bearer ${JWT}` },
+  const query = qs.stringify(
+    {
+      populate: ['product.images'],
+    },
+    { encodeValuesOnly: true }
+  );
+  const response = await axios.get(`${BASE_URL}/cart?${query}`, {
+    headers: getAuthHeaders(),
   });
   return response.data;
 };
@@ -27,7 +29,7 @@ export const addToCart = async (productId: number, quantity = 1) => {
   const response = await axios.post(
     `${BASE_URL}/cart/add`,
     { product: productId, quantity },
-    { headers: { Authorization: `Bearer ${JWT}` } }
+    { headers: getAuthHeaders() }
   );
   return response.data;
 };
@@ -36,7 +38,7 @@ export const removeFromCart = async (productId: number, quantity = 1) => {
   const response = await axios.post(
     `${BASE_URL}/cart/remove`,
     { product: productId, quantity },
-    { headers: { Authorization: `Bearer ${JWT}` } }
+    { headers: getAuthHeaders() }
   );
   return response.data;
 };

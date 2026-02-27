@@ -8,9 +8,9 @@ export type IconProps = React.SVGAttributes<SVGElement> & {
 };
 
 const colorMap = {
-  primary: styles['icon-primary'],
-  secondary: styles['icon-secondary'],
-  accent: styles['icon-accent'],
+  primary: styles['icon__color--primary'],
+  secondary: styles['icon__color--secondary'],
+  accent: styles['icon__color--accent'],
 };
 
 const Icon: React.FC<React.PropsWithChildren<IconProps>> = ({
