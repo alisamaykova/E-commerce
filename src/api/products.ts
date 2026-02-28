@@ -1,0 +1,33 @@
+import axios from 'axios';
+import qs from 'qs';
+
+const BASE_URL = 'https://front-school-strapi.ktsdev.ru/api';
+
+export const getProducts = async (page: number = 1, pageSize: number = 9) => {
+  const query = qs.stringify(
+    {
+      populate: ['images', 'productCategory'],
+      pagination: {
+        page,
+        pageSize,
+      },
+    },
+    { encodeValuesOnly: true }
+  );
+
+  const response = await axios.get(`${BASE_URL}/products?${query}`);
+
+  return response.data;
+};
+
+export const getProductById = async (documentId: string) => {
+  const query = qs.stringify(
+    {
+      populate: ['images', 'productCategory'],
+    },
+    { encodeValuesOnly: true }
+  );
+
+  const response = await axios.get(`${BASE_URL}/products/${documentId}?${query}`);
+  return response.data;
+};

@@ -1,0 +1,40 @@
+// Цвета
+$primary: rgba(0, 0, 0, 1);
+$secondary:rgba(175, 173, 181, 1);
+$accent:rgba(81, 133, 129, 1);
+$white: rgba(255, 255, 255, 1);
+$input-text-disabled:rgba(0, 0, 0, 0.2);
+$button-primary-bg-disabled: rgba(217, 217, 217, 1);
+$button-primary-bg-active:rgba(72, 119, 115, 1);
+$button-primary-bg-hover:rgba(134, 170, 167, 1);  
+$card-image-bg: $button-primary-bg-disabled;
+$checkbox-bg-disabled:rgba(255, 255, 255, 0.5);
+$line-color: rgba(243, 243, 243, 1);
+
+//Отступы и шрифты
+$size-100: 100px;
+$size-48: 48px;
+$size-40: 40px;
+$size-32: 32px;
+$size-30: 30px;
+$size-24: 24px; //xl
+$size-20: 20px; //l
+$size-18: 18px;
+$size-16: 16px; //m
+$size-14: 14px; //s
+$size-12: 12px; //xs
+$size-10: 10px;
+$size-8: 8px; //xss
+
+//Миксины
+$breakpoint-375:375;
+$breakpoint-480:480px;
+$breakpoint-768:768px;
+$breakpoint-1024:1024px;
+$breakpoint-1440:1440px;
+
+//Шрифты
+$font-400: 400;
+$font-500: 500;
+$font-600: 600;
+$font-700: 700;

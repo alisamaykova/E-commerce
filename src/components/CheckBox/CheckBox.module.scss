@@ -1,0 +1,35 @@
+@import 'styles/variables';
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+
+  &--disabled {
+    cursor: not-allowed;
+    background-color: $white;
+    opacity: 0.5;
+  }
+
+  &__input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  &__custom {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: $size-40;
+    height: $size-40;
+    background-color: $white;
+  }
+
+  &__icon {
+    width: $size-40;
+    height: $size-40;
+  }
+}

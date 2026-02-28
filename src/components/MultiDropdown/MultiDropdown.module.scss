@@ -1,0 +1,102 @@
+@import 'styles/variables';
+
+.multi-dropdown {
+  position: relative;
+  width: 377px;
+  height: 52px;
+  font-size: $size-16;
+  font-weight: $font-600;
+  line-height: 1.5;
+
+  &--disabled {
+    pointer-events: none;
+
+    .multi-dropdowninput .inputfield {
+      color: $secondary;
+    }
+  }
+}
+
+.multi-dropdown__input {
+  box-sizing: border-box;
+  font-size: $size-24;
+  font-weight: $font-400;
+  line-height: 1.5;
+  width: auto;
+  height: 52px;
+}
+
+.multi-dropdowninput {
+
+  .inputafter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border-color: $accent;
+  }
+
+  .inputfield {
+    box-sizing: border-box;
+    width: 377px;
+    height: 52px;
+    font-size: $size-16;
+    font-weight: $font-400;
+    line-height: 1.5;
+    color: $secondary;
+
+    &:hover:not(:disabled) {
+      background-color: $white;
+      border-color: $accent;
+    }
+
+    &:focus,
+    &:active {
+      background-color: $white;
+      border-color: $accent;
+    }
+  }
+}
+
+.multi-dropdown__options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  padding-top: 4px;
+  background: $white;
+  margin-top: $size-8;
+  max-height: 250px;
+  overflow-y: auto;
+  box-shadow: 0 3px 8px 3px rgba(0, 0, 0, 0.12);
+  font-size: $size-16;
+  font-weight: $font-400;
+  line-height: 1.5;
+}
+
+.multi-dropdown__option {
+  padding: $size-10 $size-12;
+  cursor: pointer;
+  height: $size-48;
+  min-height: $size-48;
+  max-height: $size-48;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &--selected {
+    color: $accent;
+
+    &:hover {
+      color: $secondary;
+    }
+  }
+}
+
+.multi-dropdowninput--open-selected,
+.multi-dropdowninput--closed-selected {
+  .inputfield {
+    color: $primary;
+  }
+}
