@@ -74,13 +74,13 @@ export const ProductList = observer(() => {
         <div className={styles['root__dropdown--container']}>
           <MultiDropdown
             className={styles.dropdown}
-            options={store.categories}
-            value={store['selectedCategories']}
+            options={store.categories || []}
+            value={store.selectedCategories}
             onChange={handleFilterChange}
             getTitle={(values) =>
               values.length === 0
-                  ? 'All categories'
-                  : values.map(v => v.value).join(', ')
+                ? 'All categories'
+                : values.map(v => v.value).join(', ')
             }
           />
         </div>

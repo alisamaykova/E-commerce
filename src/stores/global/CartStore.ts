@@ -1,27 +1,44 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeObservable, observable, action, runInAction } from 'mobx';
+import type { ProductImage } from 'types/Product';
 
 import { call } from '../../api/call';
-import type { CartItem } from '../../types/cart';
 import { MetaStore } from '../shared/MetaStore';
+
+import type { RootStore } from './RootStore';
+
+export type CartItem = {
+  id: number;
+  product: {
+    id: number;
+    title: string;
+    price: number;
+    images?: ProductImage[];
+  };
+  quantity: number;
+};
+
+type PrivateFields = '_loadCart' | '_addItemRequest' | '_removeItemRequest';
 
 export class CartStore {
   items: CartItem[] = [];
   cartMeta = new MetaStore();
+  rootStore: RootStore;
 
-  get totalItems(): number {
-    return this.items.reduce((sum, item) => sum + item.quantity, 0);
+  constructor(rootStore: RootStore) {
+    this.rootStore = rootStore;
+    makeObservable<this, PrivateFields>(this, {
+      items: observable,
+      cartMeta: observable,
+      _loadCart: action.bound,
+      _addItemRequest: action.bound,
+      _removeItemRequest: action.bound,
+      loadCart: action.bound,
+      addItem: action.bound,
+      removeItem: action.bound,
+    });
   }
 
-  get totalPrice(): number {
-    return this.items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-  }
-
-  constructor() {
-    makeAutoObservable(this);
-    this.loadCart();
-  }
-
-  async loadCart() {
+  private async _loadCart() {
     this.cartMeta.setLoadedStartMeta();
 
     const response = await call<CartItem[]>({
@@ -35,45 +52,66 @@ export class CartStore {
       return;
     }
 
+    const items = response.data || [];
     runInAction(() => {
-      this.items = response.data || [];
+      this.items = items;
       this.cartMeta.setLoadedSuccessMeta();
     });
   }
 
-  async addItem(productId: number) {
-    this.cartMeta.setLoadedStartMeta();
-
-    const response = await call({
+  private async _addItemRequest(productId: number) {
+    return await call({
       endpoint: '/cart/add',
       method: 'POST',
       data: { product: productId, quantity: 1 },
       withAuth: true,
     });
+  }
+
+  private async _removeItemRequest(productId: number, quantity: number) {
+    return await call({
+      endpoint: '/cart/remove',
+      method: 'POST',
+      data: { product: productId, quantity },
+      withAuth: true,
+    });
+  }
+
+  async loadCart() {
+    await this._loadCart();
+  }
+
+  async addItem(productId: number) {
+    this.cartMeta.setLoadedStartMeta();
+
+    const response = await this._addItemRequest(productId);
 
     if (response.isError) {
       this.cartMeta.setLoadedErrorMeta(response.error || 'Failed to add item');
       return;
     }
 
-    await this.loadCart();
+    await this._loadCart();
   }
 
   async removeItem(productId: number, quantity = 1) {
     this.cartMeta.setLoadedStartMeta();
 
-    const response = await call({
-      endpoint: '/cart/remove',
-      method: 'POST',
-      data: { product: productId, quantity },
-      withAuth: true,
-    });
+    const response = await this._removeItemRequest(productId, quantity);
 
     if (response.isError) {
       this.cartMeta.setLoadedErrorMeta(response.error || 'Failed to remove item');
       return;
     }
 
-    await this.loadCart();
+    await this._loadCart();
+  }
+
+  get totalItems(): number {
+    return this.items.reduce((sum, item) => sum + item.quantity, 0);
+  }
+
+  get totalPrice(): number {
+    return this.items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
   }
 }

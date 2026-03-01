@@ -17,7 +17,7 @@ export type MultiDropdownProps = {
   getTitle: (value: Option[]) => string;
 };
 
-const MultiDropdown: React.FC<MultiDropdownProps> = observer( ({
+const MultiDropdown: React.FC<MultiDropdownProps> = observer(({
   className,
   options,
   value,
@@ -29,11 +29,13 @@ const MultiDropdown: React.FC<MultiDropdownProps> = observer( ({
   const [filter, setFilter] = useState('');
   const ref = useRef<HTMLDivElement>(null);
 
+  const safeOptions = Array.isArray(options) ? options : [];
+
   const filteredOptions = useMemo(() => {
-    return options.filter(opt =>
+    return safeOptions.filter(opt =>
       opt.value.toLowerCase().includes(filter.toLowerCase())
     );
-  }, [options, filter]);
+  }, [safeOptions, filter]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -46,43 +48,35 @@ const MultiDropdown: React.FC<MultiDropdownProps> = observer( ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleInputClick = () => {
-    if (!disabled) {
-      setIsOpen(true);
-    }
-  };
+  const handleInputClick = () => !disabled && setIsOpen(true);
+  const handleInputChange = (v: string) => setFilter(v);
 
-  const handleInputChange = (inputValue: string) => {
-    setFilter(inputValue);
-  };
+  const selectedKeys = useMemo(() => new Set(value.map(v => v.key)), [value]);
 
   const handleOptionClick = (option: Option) => {
-    const isSelected = value.some(v => v.key === option.key);
-    const newValue = isSelected
+    const newValue = selectedKeys.has(option.key)
       ? value.filter(v => v.key !== option.key)
       : [...value, option];
     onChange(newValue);
   };
 
-  const isSelected = (option: Option) => value.some(v => v.key === option.key);
+  const displayValue = useMemo(() => {
+    return isOpen ? filter : (value.length > 0 ? getTitle(value) : '');
+  }, [isOpen, filter, value, getTitle]);
 
-  const inputValue = isOpen
-    ? filter
-    : value.length > 0
-      ? getTitle(value)
-      : '';
+  const displayPlaceholder = useMemo(() => {
+    return (isOpen && filter === '') || (!isOpen && value.length === 0) ? getTitle(value) : '';
+  }, [isOpen, filter, value, getTitle]);
 
-  const placeholder =
-    (isOpen && filter === '') || (!isOpen && value.length === 0)
-      ? getTitle(value)
-      : '';
-
-  let inputClassName = styles['multi-dropdown__input'];
-  if (isOpen && value.length > 0) {
-    inputClassName +=  `${styles['multi-dropdowninput--open-selected']}`;
-  } else if (!isOpen && value.length > 0) {
-    inputClassName +=  `${styles['multi-dropdowninput--closed-selected']}`;
-  }
+  const inputClassName = useMemo(() => {
+    let cn = styles['multi-dropdown__input'];
+    if (isOpen && value.length > 0) {
+      cn +=  `${styles['multi-dropdowninput--open-selected']}`;
+    } else if (!isOpen && value.length > 0) {
+      cn +=  `${styles['multi-dropdowninput--closed-selected']}`;
+    }
+    return cn;
+  }, [isOpen, value]);
 
   return (
     <div
@@ -91,36 +85,26 @@ const MultiDropdown: React.FC<MultiDropdownProps> = observer( ({
         styles['multi-dropdown'],
         disabled ? styles['multi-dropdown--disabled'] : '',
         className,
-      ]
-        .filter(Boolean)
-        .join(' ')}
-      data-testid="multi-dropdown"
+      ].filter(Boolean).join(' ')}
     >
       <Input
-        value={inputValue}
+        value={displayValue}
         onChange={handleInputChange}
         onClick={handleInputClick}
-        placeholder={placeholder}
+        placeholder={displayPlaceholder}
         disabled={disabled}
         className={inputClassName}
       />
-
       {isOpen && !disabled && (
-        <div
-          className={styles['multi-dropdown__options']}
-          data-testid="options-list"
-        >
+        <div className={styles['multi-dropdown__options']}>
           {filteredOptions.map(opt => (
             <div
               key={opt.key}
               className={[
                 styles['multi-dropdown__option'],
-                isSelected(opt) ? styles['multi-dropdown__option--selected'] : '',
-              ]
-                .filter(Boolean)
-                .join(' ')}
+                selectedKeys.has(opt.key) ? styles['multi-dropdown__option--selected'] : '',
+              ].filter(Boolean).join(' ')}
               onClick={() => handleOptionClick(opt)}
-              data-testid={`option-${opt.key}`}
             >
               {opt.value}
             </div>

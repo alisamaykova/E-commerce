@@ -1,76 +1,81 @@
-import { makeAutoObservable } from 'mobx';
+import { makeObservable, observable, action } from 'mobx';
+
+type PrivateFields = '_params' | '_updateUrl';
 
 export class QueryParamsStore {
-  private params: URLSearchParams;
+  private _params: URLSearchParams;
 
   constructor() {
-    this.params = new URLSearchParams(window.location.search);
-    makeAutoObservable(this);
+    this._params = new URLSearchParams(window.location.search);
+    makeObservable<this, PrivateFields>(this, {
+      _params: observable,
+      _updateUrl: action.bound,
+      setParam: action.bound,
+      setParams: action.bound,
+    });
   }
 
   getParam(key: string): string {
-    return this.params.get(key) || '';
+    return this._params.get(key) || '';
   }
 
   getNumberParam(key: string, defaultValue: number): number {
-    const value = this.params.get(key);
+    const value = this._params.get(key);
     return value ? Number(value) : defaultValue;
   }
 
   getArrayParam(key: string): string[] {
-    const value = this.params.get(key);
+    const value = this._params.get(key);
     return value ? value.split(',') : [];
+  }
+
+  private _updateUrl() {
+    const url = new URL(window.location.href);
+    url.search = this._params.toString();
+    window.history.pushState({}, '', url.toString());
   }
 
   setParam(key: string, value: string | number | string[]) {
     if (Array.isArray(value)) {
       if (value.length > 0) {
-        this.params.set(key, value.join(','));
+        this._params.set(key, value.join(','));
       } else {
-        this.params.delete(key);
+        this._params.delete(key);
       }
     } else if (value) {
-      this.params.set(key, String(value));
+      this._params.set(key, String(value));
     } else {
-      this.params.delete(key);
+      this._params.delete(key);
     }
-
-    this.updateUrl();
+    this._updateUrl();
   }
 
   setParams(updates: Record<string, string | number | string[]>) {
     const keysToKeep = new Set(Object.keys(updates));
-
-    for (const key of Array.from(this.params.keys())) {
+    for (const key of Array.from(this._params.keys())) {
       if (!keysToKeep.has(key)) {
-        this.params.delete(key);
+        this._params.delete(key);
       }
     }
 
     Object.entries(updates).forEach(([key, value]) => {
       if (Array.isArray(value)) {
         if (value.length > 0) {
-          this.params.set(key, value.join(','));
+          this._params.set(key, value.join(','));
         } else {
-          this.params.delete(key);
+          this._params.delete(key);
         }
       } else if (value) {
-        this.params.set(key, String(value));
+        this._params.set(key, String(value));
       } else {
-        this.params.delete(key);
+        this._params.delete(key);
       }
     });
 
-    this.updateUrl();
-  }
-
-  private updateUrl() {
-    const url = new URL(window.location.href);
-    url.search = this.params.toString();
-    window.history.pushState({}, '', url.toString());
+    this._updateUrl();
   }
 
   syncWithRouter(search: string) {
-    this.params = new URLSearchParams(search);
+    this._params = new URLSearchParams(search);
   }
 }

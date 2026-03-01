@@ -1,16 +1,20 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
-export function useLocalStore<T extends { destroy(): void }>(createStore: () => T): T {
+export type ILocalStore = {
+  destroy(): void;
+};
+
+export const useLocalStore = <T extends ILocalStore>(creator: () => T): T => {
   const storeRef = useRef<T | null>(null);
-
   if (!storeRef.current) {
-    storeRef.current = createStore();
+    storeRef.current = creator();
   }
-  useRef(() => {
+
+  useEffect(() => {
     return () => {
       storeRef.current?.destroy();
     };
-  });
+  }, []);
 
   return storeRef.current;
-}
+};

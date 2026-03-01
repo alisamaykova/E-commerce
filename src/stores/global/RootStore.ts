@@ -11,7 +11,7 @@ export class RootStore {
 
   constructor() {
     this.queryParamsStore = new QueryParamsStore();
-    this.cartStore = new CartStore();
+    this.cartStore = new CartStore(this);
     this.authStore = new AuthStore(this);
   }
 }
