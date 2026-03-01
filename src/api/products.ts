@@ -1,8 +1,7 @@
-import axios from 'axios';
-import type { Option } from 'components/MultiDropdown';
-import qs from 'qs';
+import type { Option } from '../components/MultiDropdown/MultiDropdown';
+import type { Product } from '../types/Product';
 
-const BASE_URL = 'https://front-school-strapi.ktsdev.ru/api';
+import { call } from './call';
 
 export const getProducts = async (
   page: number = 1,
@@ -22,31 +21,31 @@ export const getProducts = async (
       },
     };
   }
-  const query = qs.stringify(
-    {
-      populate: ['images', 'productCategory'],
-      pagination: {
-        page,
-        pageSize,
-      },
-      filters: Object.keys(filters).length > 0 ? filters : undefined,
-    },
-    { encodeValuesOnly: true }
-  );
 
-  const response = await axios.get(`${BASE_URL}/products?${query}`);
+  const params: Record<string, any> = {
+    populate: ['images', 'productCategory'],
+    pagination: { page, pageSize },
+  };
 
-  return response.data;
+  if (Object.keys(filters).length > 0) {
+    params.filters = filters;
+  }
+
+  return call<{ data: Product[]; meta: { pagination: { total: number; pageCount: number } } }>({
+    endpoint: '/products',
+    method: 'GET',
+    params,
+    withAuth: false,
+  });
 };
 
 export const getProductById = async (documentId: string) => {
-  const query = qs.stringify(
-    {
+  return call<{ data: Product }>({
+    endpoint: `/products/${documentId}`,
+    method: 'GET',
+    params: {
       populate: ['images', 'productCategory'],
     },
-    { encodeValuesOnly: true }
-  );
-
-  const response = await axios.get(`${BASE_URL}/products/${documentId}?${query}`);
-  return response.data;
+    withAuth: false,
+  });
 };

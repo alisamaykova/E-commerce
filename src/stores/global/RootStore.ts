@@ -1,15 +1,18 @@
 import { createContext, useContext } from 'react';
 
+import { AuthStore } from './AuthStore';
 import { CartStore } from './CartStore';
-import { ProductStore } from './ProductStore';
+import { QueryParamsStore } from './QueryParamsStore';
 
 export class RootStore {
-  productStore: ProductStore;
   cartStore: CartStore;
+  authStore: AuthStore;
+  queryParamsStore: QueryParamsStore;
 
   constructor() {
-    this.productStore = new ProductStore();
+    this.queryParamsStore = new QueryParamsStore();
     this.cartStore = new CartStore();
+    this.authStore = new AuthStore(this);
   }
 }
 

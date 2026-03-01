@@ -4,14 +4,14 @@ import { createRoot } from 'react-dom/client';
 
 import './index.css';
 import App from './App.tsx';
-import { RootStoreContext, createStore  } from './stores';
+import { RootStoreContext, RootStore  } from './stores';
 
-const store = createStore();
+const store = new RootStore();
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+ <StrictMode> 
     <RootStoreContext.Provider value={store}>
     <App />
     </RootStoreContext.Provider>
-  </StrictMode>
+</StrictMode>
 );

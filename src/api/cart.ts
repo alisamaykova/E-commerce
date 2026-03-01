@@ -1,44 +1,50 @@
-import axios from 'axios';
-import qs from 'qs';
-import type { CartItem } from 'types/cart';
+import type { CartItem } from '../types/cart';
 
-const BASE_URL = 'https://front-school-strapi.ktsdev.ru/api';
-
-const getAuthHeaders = () => {
-  const jwt = localStorage.getItem('jwt');
-  if (!jwt) {
-    throw new Error('No JWT found. Please login first.');
-  }
-  return { Authorization: `Bearer ${jwt}` };
-};
+import { call } from './call';
 
 export const getCart = async (): Promise<CartItem[]> => {
-  const query = qs.stringify(
-    {
+  const response = await call<CartItem[]>({
+    endpoint: '/cart',
+    method: 'GET',
+    params: {
       populate: ['product.images'],
     },
-    { encodeValuesOnly: true }
-  );
-  const response = await axios.get(`${BASE_URL}/cart?${query}`, {
-    headers: getAuthHeaders(),
+    withAuth: true,
   });
-  return response.data;
+
+  if (response.isError) {
+    throw new Error(response.error || 'Failed to load cart');
+  }
+
+  return response.data || [];
 };
 
 export const addToCart = async (productId: number, quantity = 1) => {
-  const response = await axios.post(
-    `${BASE_URL}/cart/add`,
-    { product: productId, quantity },
-    { headers: getAuthHeaders() }
-  );
+  const response = await call({
+    endpoint: '/cart/add',
+    method: 'POST',
+    data: { product: productId, quantity },
+    withAuth: true,
+  });
+
+  if (response.isError) {
+    throw new Error(response.error || 'Failed to add item');
+  }
+
   return response.data;
 };
 
 export const removeFromCart = async (productId: number, quantity = 1) => {
-  const response = await axios.post(
-    `${BASE_URL}/cart/remove`,
-    { product: productId, quantity },
-    { headers: getAuthHeaders() }
-  );
+  const response = await call({
+    endpoint: '/cart/remove',
+    method: 'POST',
+    data: { product: productId, quantity },
+    withAuth: true,
+  });
+
+  if (response.isError) {
+    throw new Error(response.error || 'Failed to remove item');
+  }
+
   return response.data;
 };

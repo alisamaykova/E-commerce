@@ -1,20 +1,14 @@
 import { useContext } from 'react';
 
-import { ProductStore } from './ProductStore';
-import { RootStore, RootStoreContext } from './RootStore';
-
-export const createStore = () => {
-  const rootStore = new RootStore();
-
-  (rootStore as any).productStore = new ProductStore();
-
-  return rootStore;
-};
+import { RootStoreContext } from './global/RootStore';
+export { rootStore } from './global/instance';
 
 export const useStore = () => {
   const context = useContext(RootStoreContext);
-  if (!context) throw new Error('...');
+  if (!context) {
+    throw new Error('useStore must be used within RootStoreProvider');
+  }
   return context;
 };
 
-export { RootStoreContext } from './RootStore';
+export { RootStore, RootStoreContext } from './global/RootStore';

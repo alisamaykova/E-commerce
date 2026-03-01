@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../stores';
+import { runInAction } from 'mobx';
 import Button from '../../components/Button/Button';
 import Text from '../../components/Text';
 import styles from './CartPage.module.scss';
@@ -8,8 +9,8 @@ import Loader from 'components/Loader';
 export const CartPage = observer(() => {
   const { cartStore } = useStore();
 
-  if (cartStore.loading) return <div className={styles['loader--container']}><Loader size='l'/> </div>
-  if (cartStore.error) return <div className={styles['error--container']}>Error: {cartStore.error}</div>;
+  if (cartStore.cartMeta.isLoading) return <div className={styles['loader--container']}><Loader size='l'/> </div>
+  if (cartStore.cartMeta.isError) return <div className={styles['error--container']}>Error: {cartStore.cartMeta.error}</div>;
 
   return (
     <div className={styles.root}>
@@ -33,12 +34,12 @@ export const CartPage = observer(() => {
                 </div>
                 <div className={styles['root__item--quantity']}>
                   <Button
-                    onClick={() => cartStore.removeItem(item.product.id)}
+                    onClick={() => runInAction(() => cartStore.removeItem(item.product.id))}
                     className={styles['root__quantity--button']}
                   >−</Button>
                   <Text view="p-16">{item.quantity}</Text>
                   <Button
-                    onClick={() => cartStore.addItem(item.product.id)}
+                    onClick={() => runInAction(() => cartStore.addItem(item.product.id))}
                     className={styles['root__quantity--button']}
                   >+</Button>
                 </div>

@@ -1,50 +1,49 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '../../stores';
+import { useStore } from '../../stores/global/RootStore'
+import { useLocalStore } from '../../hooks/useLocalStore';
+import { ProductListPageStore } from '../../stores/local/pages/ProductListPageStore';
 import Card from '../../components/Card/Card';
 import Button from '../../components/Button/Button';
 import { Pagination } from '../../components/Pagination/Pagination';
 import Text from '../../components/Text';
 import Input from '../../components/Input';
-import MultiDropdown from 'components/MultiDropdown/MultiDropdown'
+import MultiDropdown from 'components/MultiDropdown/MultiDropdown';
 import type { Option } from 'components/MultiDropdown/MultiDropdown';
 import Loader from 'components/Loader';
 import styles from './ProductList.module.scss';
+import { runInAction } from 'mobx';
 
 export const ProductList = observer(() => {
   const navigate = useNavigate();
-  const { productStore, cartStore } = useStore();
-  const [localSearch, setLocalSearch] = useState(productStore.searchQuery);
-
-  console.log('render:', {
-    localSearch,
-    storeSearch: productStore.searchQuery
-  });
-
-  useEffect(() => {
-    setLocalSearch(productStore.searchQuery);
-  }, [productStore.searchQuery]);
+  const { cartStore, queryParamsStore } = useStore();
+  const store = useLocalStore(() => new ProductListPageStore(queryParamsStore));
+  const [localSearch, setLocalSearch] = useState(store.searchQuery);
 
   const handleSearch = () => {
-    productStore.applySearch(localSearch);
+    store.applySearch(localSearch);
   };
-  if (!productStore.categories) {
-    return null
-  }
-  const categories = productStore.categories;
+
 
   const handleCardClick = (documentId: string) => {
-    navigate(`/product/${documentId}`);
+    runInAction(() => {
+      navigate(`/product/${documentId}`);
+    });
   };
 
   const handleFilterChange = (categories: Option[]) => {
-    productStore.applyFilter(categories);
+    console.log('handleFilterChange received:', categories);
+    store.applyFilter(categories);
   };
-  if (productStore.error) {
-    return <div className={styles['error--container']}>Error: {productStore.error}</div>;
+
+  if (store.productsMeta.isLoading && store.products.length === 0) {
+    return <div className={styles['loader--container']}><Loader size="l" /></div>;
   }
 
+  if (store.productsMeta.isError) {
+    return <div className={styles['error--container']}>Error: {store.productsMeta.error}</div>;
+  }
 
   return (
     <div className={styles.root}>
@@ -75,13 +74,11 @@ export const ProductList = observer(() => {
         <div className={styles['root__dropdown--container']}>
           <MultiDropdown
             className={styles.dropdown}
-            options={categories}
-            value={productStore['selectedCategories']}
+            options={store.categories}
+            value={store['selectedCategories']}
             onChange={handleFilterChange}
             getTitle={(values) =>
               values.length === 0
-                ? 'All categories'
-                : values.length === 0
                   ? 'All categories'
                   : values.map(v => v.value).join(', ')
             }
@@ -89,15 +86,15 @@ export const ProductList = observer(() => {
         </div>
         <div className={styles['root__total--products']}>
           <Text className={styles['root__total--products--text']} view="subtitle">Total products</Text>
-          <Text className={styles['root__total--text']} view="p-20" weight='bold' color="accent">{productStore.total}</Text>
+          <Text className={styles['root__total--text']} view="p-20" weight='bold' color="accent">{store.total}</Text>
         </div>
       </div>
 
       <div className={styles['root__grid--container']}>
-        {productStore.loading ? (
+        {store.productsMeta.isLoading ? (
           <div className={styles['loader--container']}>
             <Loader size='l' />
-          </div>) : productStore.products.length === 0 ? (
+          </div>) : store.products.length === 0 ? (
             <div className={styles['root__empty--grid']}>
               <Text view='p-20' color='secondary'>
                 По данному запросу ничего не найдено
@@ -105,34 +102,40 @@ export const ProductList = observer(() => {
             </div>
           ) : (
           <div className={styles['root__grid']}>
-            {productStore.products.map((product) => (
-              <Card
-                key={product.id}
-                image={
-                  product.images?.[0]?.formats?.medium?.url ||
-                  product.images?.[0]?.url ||
-                  ''
-                }
-                captionSlot={product.productCategory?.title}
-                title={product.title}
-                subtitle={product.description}
-                contentSlot={`$${product.price}`}
-                onClick={() => handleCardClick(product.documentId)}
-                actionSlot={<Button onClick={() => cartStore.addItem(product.id)}>
-                  Add to cart
-                </Button>}
-              />
-            ))}
+            {store.products.map((product) => {
+              const documentId = product.documentId;
+              return (
+                <Card
+                  key={product.id}
+                  image={
+                    product.images?.[0]?.formats?.medium?.url ||
+                    product.images?.[0]?.url ||
+                    ''
+                  }
+                  captionSlot={product.productCategory?.title}
+                  title={product.title}
+                  subtitle={product.description}
+                  contentSlot={`$${product.price}`}
+                  onClick={() => handleCardClick(documentId)}
+                  actionSlot={<Button onClick={() => cartStore.addItem(product.id)}>
+                    Add to cart
+                  </Button>
+                  }
+                />
+              );
+            })}
           </div>
         )}
       </div>
-      <div className={styles['root__pagination--container']}>
-        <Pagination
-          currentPage={productStore.page}
-          pageCount={productStore.pageCount}
-          onPageChange={(page) => productStore.setPage(page)}
-        />
-      </div>
+      {store.pageCount > 1 && (
+        <div className={styles['root__pagination--container']}>
+          <Pagination
+            currentPage={store.page}
+            pageCount={store.pageCount}
+            onPageChange={(page) => store.setPage(page)}
+          />
+        </div>
+      )}
     </div>
   );
 });

@@ -1,5 +1,5 @@
-import { Link, NavLink } from "react-router-dom";
-import { observer, Observer } from "mobx-react-lite";
+import { NavLink } from "react-router-dom";
+import { observer} from "mobx-react-lite";
 import logo from '../../assets/logo.png';
 import UserIcon from "components/icons/UserIcon/UserIcon";
 import styles from './Header.module.scss';
