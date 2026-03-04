@@ -13,18 +13,18 @@ export const initAuth = async (store: RootStore) => {
   );
 
   if (!registerResult.isError) {
-    console.log('✅ Регистрация успешна');
+    console.log('Регистрация успешна');
     await store.cartStore.loadCart();
     return;
   }
 
-  console.log('⚠️ Регистрация не удалась, пробуем логин');
+  console.log('Регистрация не удалась, пробуем логин');
   const loginResult = await store.authStore.login('testuser@example.com', 'Test123456!');
 
   if (!loginResult.isError) {
-    console.log('✅ Логин успешен');
+    console.log('Логин успешен');
     await store.cartStore.loadCart();
   } else {
-    console.error('❌ Ошибка авторизации', loginResult.error);
+    console.error('Ошибка авторизации', loginResult.error);
   }
 };
