@@ -18,52 +18,53 @@
   user-select: none;
   gap: $size-14;
   transition: background-color 0.2s ease;
-}
 
-.button:active {
-  background-color: $button-primary-bg-active;
-}
 
-.button:active:hover {
-  background-color: $button-primary-bg-active;
-}
+  &:active {
+    background-color: $button-primary-bg-active;
+  }
 
-.button:disabled {
-  background-color: $button-primary-bg-disabled;
-}
+  &:active:hover {
+    background-color: $button-primary-bg-active;
+  }
 
-.button:disabled:hover {
-  background-color: $button-primary-bg-disabled;
-}
+  &:disabled {
+    background-color: $button-primary-bg-disabled;
+  }
 
-.button:hover {
-  background-color: $button-primary-bg-hover;
-}
+  &:disabled:hover {
+    background-color: $button-primary-bg-disabled;
+  }
 
-.button .loader-container {
-  width: $size-16;
-  height: auto;
-  position: static;
-  display: inline-block;
-  align-items: center;
-  justify-content: center;
-}
+  &:hover {
+    background-color: $button-primary-bg-hover;
+  }
 
-.button .loader {
-  position: static;
-  border-color: $white;
-  border-top-color: transparent;
-  top: auto;
-}
+  & .loader-container {
+    width: $size-16;
+    height: auto;
+    position: static;
+    display: inline-block;
+    align-items: center;
+    justify-content: center;
+  }
 
-.button--loading-original-enabled:disabled,
-.button--loading-original-enabled:disabled:hover,
-.button--loading-original-enabled:disabled:active {
-  background-color: $accent;
-  cursor: default;
-}
+  & .loader {
+    position: static;
+    border-color: $white;
+    border-top-color: transparent;
+    top: auto;
+  }
 
-.button--text {
-  display: inline-flex;
-  align-items: center;
+  &--loading-original-enabled:disabled,
+  &--loading-original-enabled:disabled:hover,
+  &--loading-original-enabled:disabled:active {
+    background-color: $accent;
+    cursor: default;
+  }
+
+  &--text {
+    display: inline-flex;
+    align-items: center;
+  }
 }

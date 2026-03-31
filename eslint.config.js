@@ -36,7 +36,7 @@ export default [
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'warn',
       '@typescript-eslint/no-unnecessary-condition': 'warn',
-      'no-console': 'error',
+      'no-console': ['error', {allow: ['log', 'warn', 'error']}],
       'no-undef': 'off',
       'eol-last': ['error', 'always'],
       'linebreak-style': ['error', 'unix'],

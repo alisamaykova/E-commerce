@@ -1,0 +1,88 @@
+@import 'styles/variables';
+@import 'styles/mixin';
+
+.root {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $size-24 $size-20;
+
+
+  &__title {
+    margin-bottom: $size-24;
+  }
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: $size-16;
+    margin-bottom: $size-24;
+  }
+
+  &__item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto auto;
+    gap: $size-16;
+    align-items: center;
+    padding: $size-16;
+    border: none;
+    background-color: $white;
+
+    @include mobile {
+      gap: $size-8
+    }
+  }
+
+  &__item--image {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+  }
+
+  &__item--info {
+    display: flex;
+    flex-direction: column;
+    gap: $size-12;
+  }
+
+  &__item--title--text {
+
+    @include mobile {
+      font-size: $size-12;
+    }
+  }
+
+
+  &__item--quantity {
+    display: flex;
+    align-items: center;
+    gap: $size-14;
+  }
+
+  &__quantity--button {
+    min-width: $size-32;
+    height: $size-32;
+    padding: 0;
+    font-size: $size-16;
+  }
+
+  &__total {
+    margin-top: $size-16;
+    display: flex;
+    justify-content: flex-end;
+    gap: $size-16;
+    padding-top: $size-20;
+    border-top: 6px solid $white;
+  }
+}
+
+.error--container {
+  text-align: center;
+  color: $primary;
+  margin-top: $size-16;
+}
+
+.loader--container {
+  margin: 250px auto;
+  display: flex;
+  justify-content: center;
+}

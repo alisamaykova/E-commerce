@@ -20,7 +20,7 @@ export const Pagination: React.FC<PaginationProps> = ({
     <div className={styles.pagination}>
       <button
       type = 'button'
-        className={styles.arrow}
+        className={styles['pagination__arrow']}
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
@@ -30,7 +30,7 @@ export const Pagination: React.FC<PaginationProps> = ({
       {pages.map((page, index) => {
         if (typeof page === 'string') {
           return (
-            <span key={`dots-${index}`} className={styles.dots}>
+            <span key={`dots-${index}`} className={styles['pagination__dots']}>
               ...
             </span>
           );
@@ -39,7 +39,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           <button
           type='button'
             key={page}
-            className={`${styles.pageButton} ${page === currentPage ? styles.active : ''
+            className={`${styles['pagination__page--button']} ${page === currentPage ? styles.active : ''
               }`}
             onClick={() => onPageChange(page)}
           >
@@ -50,7 +50,7 @@ export const Pagination: React.FC<PaginationProps> = ({
 
       <button
       type='button'
-        className={styles.arrow}
+        className={styles['pagination__arrow']}
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === pageCount}
       >

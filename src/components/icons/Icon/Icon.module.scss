@@ -1,13 +1,15 @@
 @import 'styles/variables';
 
-.icon-primary {
-  color: $primary;
-}
+.icon {
+  &__color--primary {
+    color: $primary;
+  }
 
-.icon-secondary {
-  color: $secondary;
-}
+  &__color--secondary {
+    color: $secondary;
+  }
 
-.icon-accent {
-  color: $accent;
+  &__color--accent {
+    color: $accent;
+  }
 }

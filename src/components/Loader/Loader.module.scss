@@ -1,6 +1,6 @@
 @import 'styles/variables';
 
-.loader-container {
+.loader--container {
   position: relative;
   width: $size-100;
   height: $size-100;
@@ -15,39 +15,40 @@
   aspect-ratio: 1/1;
   flex-shrink: 0;
   animation: spin 1s linear infinite;
-}
 
-.loader--s {
-  top: 4px;
-  left: 4px;
-  width: $size-16;
-  height: $size-16;
-  border: 2px solid $accent;
-  border-top-color: transparent;
-}
+  &--s {
+    top: 4px;
+    left: 4px;
+    width: $size-16;
+    height: $size-16;
+    border: 2px solid $accent;
+    border-top-color: transparent;
+  }
 
-.loader--m {
-  top: $size-8;
-  left: $size-8;
-  width: $size-32;
-  height: $size-32;
-  border: 4px solid $accent;
-  border-top-color: transparent;
-}
+  &--m {
+    top: $size-8;
+    left: $size-8;
+    width: $size-32;
+    height: $size-32;
+    border: 4px solid $accent;
+    border-top-color: transparent;
+  }
 
-.loader--l {
-  top: $size-10;
-  left: $size-10;
-  width: $size-40;
-  height: $size-40;
-  border: 5px solid $accent;
-  border-top-color: transparent;
+  &--l {
+    top: $size-10;
+    left: $size-10;
+    width: $size-40;
+    height: $size-40;
+    border: 5px solid $accent;
+    border-top-color: transparent;
+  }
 }
 
 @keyframes spin {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }

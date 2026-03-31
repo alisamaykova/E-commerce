@@ -23,9 +23,9 @@ const Text: React.FC<TextProps> = ({
 }) => {
   const textClasses = [
     styles.text,
-    view && styles[`view-${view}`],
-    weight && styles[`weight-${weight}`],
-    color && styles[`color-${color}`],
+    view && styles[`text__view--${view}`],
+    weight && styles[`text__weight--${weight}`],
+    color && styles[`text__color--${color}`],
     className,
   ]
     .filter(Boolean)
